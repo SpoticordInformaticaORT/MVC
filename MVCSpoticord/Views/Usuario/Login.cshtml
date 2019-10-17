@@ -1,0 +1,15 @@
+﻿@using AppDeMusica.Models;
+@model Usuario
+@{
+    ViewBag.Title = "Login";
+}
+
+<h2>Login</h2>
+
+@using (Html.BeginForm("LoginEnBD", "Usuario", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    <p>Username: @Html.TextBoxFor(x => x.Username)</p>
+    <p>Contraseña: @Html.TextBoxFor(x => x.Contraseña)</p>
+    //<input type="file" value="Submit" name="Imagen" />
+    <input type="submit" value="Agregar Usuario" />
+}
