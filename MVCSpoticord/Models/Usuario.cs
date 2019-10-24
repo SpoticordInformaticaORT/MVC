@@ -2,12 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
-using AppDeMusica.Models;
+using MVCSpoticord.Models;
 
-namespace AppDeMusica.Models
+namespace MVCSpoticord.Models
 {
     public class Usuario
     {
+        private int _id;
         private string _nombre;
         private string _apellido;
         private string _username;
@@ -16,8 +17,9 @@ namespace AppDeMusica.Models
         private string _imagen;
         private int _idSpotify;
 
-        public Usuario(string nombre, string apellido, string username, string contraseña, string mail, string imagen, int ID_Spotify)
+        public Usuario(int id, string nombre, string apellido, string username, string contraseña, string mail, string imagen, int ID_Spotify)
         {
+            _id = id;
             _nombre = nombre;
             _apellido = apellido;
             _username = username;
@@ -32,6 +34,17 @@ namespace AppDeMusica.Models
 
         }
 
+        public int ID
+        {
+            get
+            {
+                return _id;
+            }
+            set
+            {
+                _id = value;
+            }
+        }
         public string Nombre
         {
             get

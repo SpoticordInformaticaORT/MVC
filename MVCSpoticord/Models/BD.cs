@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Data.SqlClient;
-using AppDeMusica.Models;
+using MVCSpoticord.Models;
 
-namespace AppDeMusica.Models
+namespace MVCSpoticord.Models
 {
     public class BD
     {
@@ -31,6 +31,33 @@ namespace AppDeMusica.Models
             conexion.Close();
         }
 
+        public static List<Usuario> ObtenerUsuarios()
+        {
+            List<Usuario> Usuarios = new List<Usuario>();
+            SqlConnection conexion = Conectar();
+            SqlCommand consulta = conexion.CreateCommand();
+            consulta.CommandText = "SELECT ID_Usuario, Nombre, Apellido, Username, Contraseña, Mail, Imagen, ID_Spotify FROM Usuario";
+            consulta.CommandType = System.Data.CommandType.Text;
+            SqlDataReader lector = consulta.ExecuteReader();
+            if (lector.HasRows)
+            {
+                while (lector.Read())
+                {
+                    int ID = Convert.ToInt32(lector["ID_Usuario"]);
+                    string Nombre = (lector["Nombre"]).ToString();
+                    string Apellido = lector["Apellido"].ToString();
+                    string Username = (lector["Username"]).ToString();
+                    string Contraseña = (lector["Contraseña"]).ToString();
+                    string Mail = (lector["Mail"]).ToString();
+                    string Imagen = null;//(lector["Imagen"]).ToString();
+                    int ID_Spotify = 0; //Convert.ToInt32(lector["ID_Spotify"]);
+                    Usuario unUsuario = new Usuario(ID,Nombre,Apellido,Username,Contraseña,Mail,Imagen,ID_Spotify);
+                    Usuarios.Add(unUsuario);
+                }
+            }
+            return Usuarios;
+        }
+
         public static Usuario Login(string Username, string Contraseña)
         {
             Usuario unUsuario = null;
@@ -40,26 +67,27 @@ namespace AppDeMusica.Models
             consulta.CommandType = System.Data.CommandType.StoredProcedure;
             consulta.Parameters.AddWithValue("@Username", Username);
             consulta.Parameters.AddWithValue("@Contraseña", Contraseña);
+            consulta.ExecuteNonQuery();
             SqlDataReader lector = consulta.ExecuteReader();
             if (lector.HasRows)
             {
                 lector.Read();
-                    string Nombre = (lector["Nombre"]).ToString();
-                    string Apellido = lector["Apellido"].ToString();
-                    string Usuario = (lector["Username"]).ToString();
-                    string Contra = (lector["Contraseña"]).ToString();
-                    string Direccion = (lector["Mail"]).ToString();
-                    string Imagen = (lector["Imagen"]).ToString();
-                    int ID_Spotify = Convert.ToInt32(lector["ID_Spotify"]);
-                    Usuario usuario = new Usuario(Nombre, Apellido, Usuario, Contra, Direccion, Imagen, ID_Spotify);
+                unUsuario = new Usuario();
+                unUsuario.Nombre = (lector["Nombre"]).ToString();
+                unUsuario.Apellido = lector["Apellido"].ToString();
+                unUsuario.Username = (lector["Username"]).ToString();
+                unUsuario.Contraseña = (lector["Contraseña"]).ToString();
+                unUsuario.Mail = (lector["Mail"]).ToString();
+                unUsuario.Imagen = (lector["Imagen"]).ToString();
+                unUsuario.ID_Spotify = 0; //Convert.ToInt32(lector["ID_Spotify"]);
             }
             conexion.Close();
             return unUsuario;
         }
 
-        public static string RegistrarUsuario(string Nombre, string Apellido, string Username, string Contraseña, string Mail)
+        public static void RegistrarUsuario(string Nombre, string Apellido, string Username, string Contraseña, string Mail)
         {
-            string result = null;
+            //string result = null;
             SqlConnection conexion = Conectar();
             SqlCommand consulta = conexion.CreateCommand();
             consulta.CommandText = "sp_RegistrarUsuario";
@@ -69,12 +97,13 @@ namespace AppDeMusica.Models
             consulta.Parameters.AddWithValue("@Username", Username);
             consulta.Parameters.AddWithValue("@Contraseña", Contraseña);
             consulta.Parameters.AddWithValue("@Mail", Mail);
-            SqlDataReader lector = consulta.ExecuteReader();
+            consulta.ExecuteNonQuery();
+            /*SqlDataReader lector = consulta.ExecuteReader();
             if (lector.HasRows)
             {
                 result = lector.Read().ToString();
-            }
-            return result;
+            }*/
+            //return result;
         }
     }
 }

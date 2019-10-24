@@ -1,0 +1,32 @@
+﻿@using MVCSpoticord.Models;
+@{
+    ViewBag.Title = "PerfilUsuario";
+}
+
+<h2>Perfil</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col">Nombre</th>
+            <th scope="col">Apellido</th>
+            <th scope="col">Username</th>
+            <th scope="col">Contraseña</th>
+            <th scope="col">Mail</th>
+            <th scope="col">Imagen</th>
+            <th scope="col">ID_Spotify</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <!--<th scope="row">ID</th>-->
+            <td>@Session["Nombre"]</td>
+            <td>@Session["Apellido"]</td>
+            <td>@Session["Username"]</td>
+            <td>Contraseña</td>
+            <td>@Session["Mail"]</td>
+            <td>@Session["Imagen"]</td>
+            <td>@Session["ID_Spotify"]</td>
+        </tr>
+    </tbody>
+</table>

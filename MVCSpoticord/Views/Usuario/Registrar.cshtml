@@ -1,0 +1,18 @@
+﻿@using MVCSpoticord.Models;
+@model Usuario
+@{
+    ViewBag.Title = "Registro";
+}
+
+<h2>Sign Up</h2>
+
+@using (Html.BeginForm("RegistrarEnBD", "Usuario", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    <p>Nombre: @Html.TextBoxFor(x => x.Nombre)</p>
+    <p>Apellido: @Html.TextBoxFor(x => x.Apellido)</p>
+    <p>Username: @Html.TextBoxFor(x => x.Username)</p>
+    <p>Contraseña: @Html.TextBoxFor(x => x.Contraseña)</p>
+    <p>Mail: @Html.TextBoxFor(x => x.Mail)</p>
+    //<input type="file" value="Submit" name="Imagen" />
+    <input type="submit" value="Confirmar"/>
+}
