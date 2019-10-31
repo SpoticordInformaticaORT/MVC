@@ -21,15 +21,24 @@ namespace MVCSpoticord.Controllers
         public ActionResult LoginEnBD(Usuario unUsuario)
         {
             Usuario user = BD.Login(unUsuario.Username, unUsuario.Contraseña);
-            Session["Nombre"] = user.Nombre;
-            Session["Apellido"] = user.Apellido;
-            Session["Username"] = user.Username;
-            Session["Contraseña"] = user.Contraseña;
-            Session["Mail"] = user.Mail;
-            Session["Imagen"] = user.Imagen;
-            Session["ID_Spotify"] = user.ID_Spotify;
-            ViewBag.Usuario = user;
-            return RedirectToAction("PerfilUsuario");
+            if (user != null)
+            {
+                Session["ID_Usuario"] = user.ID;
+                Session["Nombre"] = user.Nombre;
+                Session["Apellido"] = user.Apellido;
+                Session["Username"] = user.Username;
+                Session["Contraseña"] = user.Contraseña;
+                Session["Mail"] = user.Mail;
+                Session["Imagen"] = user.Imagen;
+                Session["ID_Spotify"] = user.ID_Spotify;
+                Session["Error"] = null;
+                return RedirectToAction("PerfilUsuario");
+            }
+            else
+            {
+                Session["Error"] = true;
+                return RedirectToAction("Login");
+            }
         }
 
         public ActionResult Login()
@@ -38,9 +47,15 @@ namespace MVCSpoticord.Controllers
         }
 
         [HttpPost]
-        public ActionResult RegistrarEnBD(Usuario unUsuario)
+        public ActionResult RegistrarEnBD(Usuario unUsuario, HttpPostedFileBase Imagen)
         {
-            BD.RegistrarUsuario(unUsuario.Nombre, unUsuario.Apellido, unUsuario.Username, unUsuario.Contraseña, unUsuario.Mail);
+            if (Imagen != null && Imagen.ContentLength > 0)
+            {
+                string NuevaUbicacion = Server.MapPath("~/ImagenesUsuarios/") + Imagen.FileName;
+                Imagen.SaveAs(NuevaUbicacion);
+                unUsuario.Imagen = Imagen.FileName;
+            }
+            BD.RegistrarUsuario(unUsuario.Nombre, unUsuario.Apellido, unUsuario.Username, unUsuario.Contraseña, unUsuario.Mail, unUsuario.Imagen);
             return RedirectToAction("Index");
         }
 
@@ -52,6 +67,27 @@ namespace MVCSpoticord.Controllers
         public ActionResult PerfilUsuario()
         {
             return View();
+        }
+
+        public ActionResult ModificarContraseña()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public ActionResult ModificarContraseñaEnBD(string contraseñaVieja, string contraseñaNueva)
+        {
+            string validacion;
+            int id = Convert.ToInt32(Session["ID_Usuario"]);
+            validacion = BD.ModificarContraseña(id, contraseñaVieja, contraseñaNueva);
+            if (validacion == null)
+            {
+                return RedirectToAction("ModificarContraseña");
+            }
+            else
+            {
+                return RedirectToAction("PerfilUsuario");
+            }
         }
     }
 }

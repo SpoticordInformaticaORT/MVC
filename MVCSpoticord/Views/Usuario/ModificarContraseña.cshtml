@@ -1,0 +1,14 @@
+﻿@using MVCSpoticord.Models;
+@model CambioContraseña 
+@{
+    ViewBag.Title = "ModificarContraseña";
+}
+
+<h2>Modificar Contraseña</h2>
+
+@using (Html.BeginForm("ModificarContraseñaEnBD", "Usuario", FormMethod.Post))
+{
+    <p>Contraseña Actual: @Html.TextBoxFor(x => x.contraseñaNueva)</p>
+    <p>Nueva Contraseña: @Html.TextBoxFor(x => x.contraseñaVieja)</p>
+    <input type="submit" value="Modificar" />
+}

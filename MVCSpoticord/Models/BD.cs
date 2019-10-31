@@ -49,7 +49,7 @@ namespace MVCSpoticord.Models
                     string Username = (lector["Username"]).ToString();
                     string Contraseña = (lector["Contraseña"]).ToString();
                     string Mail = (lector["Mail"]).ToString();
-                    string Imagen = null;//(lector["Imagen"]).ToString();
+                    string Imagen = (lector["Imagen"]).ToString();
                     int ID_Spotify = 0; //Convert.ToInt32(lector["ID_Spotify"]);
                     Usuario unUsuario = new Usuario(ID,Nombre,Apellido,Username,Contraseña,Mail,Imagen,ID_Spotify);
                     Usuarios.Add(unUsuario);
@@ -73,6 +73,7 @@ namespace MVCSpoticord.Models
             {
                 lector.Read();
                 unUsuario = new Usuario();
+                unUsuario.ID = Convert.ToInt32(lector["ID_Usuario"]);
                 unUsuario.Nombre = (lector["Nombre"]).ToString();
                 unUsuario.Apellido = lector["Apellido"].ToString();
                 unUsuario.Username = (lector["Username"]).ToString();
@@ -85,7 +86,7 @@ namespace MVCSpoticord.Models
             return unUsuario;
         }
 
-        public static void RegistrarUsuario(string Nombre, string Apellido, string Username, string Contraseña, string Mail)
+        public static void RegistrarUsuario(string Nombre, string Apellido, string Username, string Contraseña, string Mail, string Imagen)
         {
             //string result = null;
             SqlConnection conexion = Conectar();
@@ -97,6 +98,7 @@ namespace MVCSpoticord.Models
             consulta.Parameters.AddWithValue("@Username", Username);
             consulta.Parameters.AddWithValue("@Contraseña", Contraseña);
             consulta.Parameters.AddWithValue("@Mail", Mail);
+            consulta.Parameters.AddWithValue("@Imagen", Imagen);
             consulta.ExecuteNonQuery();
             /*SqlDataReader lector = consulta.ExecuteReader();
             if (lector.HasRows)
@@ -104,6 +106,27 @@ namespace MVCSpoticord.Models
                 result = lector.Read().ToString();
             }*/
             //return result;
+        }
+
+        public static string ModificarContraseña(int ID_Usuario, string contraseñaNueva, string contraseñaVieja)
+        {
+            string id = null;
+            SqlConnection conexion = Conectar();
+            SqlCommand consulta = conexion.CreateCommand();
+            consulta.CommandText = "sp_ModificarContraseña";
+            consulta.CommandType = System.Data.CommandType.StoredProcedure;
+            consulta.Parameters.AddWithValue("@ID_Usuario", ID_Usuario);
+            consulta.Parameters.AddWithValue("@ContraseñaVieja", contraseñaVieja);
+            consulta.Parameters.AddWithValue("@ContraseñaNueva", contraseñaNueva);
+            consulta.ExecuteNonQuery();
+            SqlDataReader lector = consulta.ExecuteReader();
+            if (lector.HasRows)
+            {
+                lector.Read();
+                id = (lector["ID_Usuario"]).ToString();
+            }
+            conexion.Close();
+            return id;
         }
     }
 }

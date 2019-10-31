@@ -4,6 +4,15 @@
     ViewBag.Title = "Login";
 }
 
+@if (Session["Error"] != null)
+{
+    <div style="height: 3vw;width: 30vw;margin-top: 1vw;margin-bottom: 1vw;background-color: red;color: white;font-family: monospace;font-size: 1.2vw;border-radius:1.4vw;">
+        <p style="height: 3vw; width: 30vw;display: flex;flex-wrap: wrap;align-content: center;justify-content: center;">
+            <strong>Nombre de usuario o contraseña incorrectas</strong>
+        </p>
+    </div>
+}
+
 <h2>Sign In</h2>
 
 @using (Html.BeginForm("LoginEnBD", "Usuario", FormMethod.Post, new { enctype = "multipart/form-data" }))

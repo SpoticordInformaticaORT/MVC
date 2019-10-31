@@ -23,9 +23,9 @@
             <td>@Session["Nombre"]</td>
             <td>@Session["Apellido"]</td>
             <td>@Session["Username"]</td>
-            <td>Contraseña</td>
+            <td>@Html.ActionLink("Modificar", "ModificarContraseña", "Usuario")</td>
             <td>@Session["Mail"]</td>
-            <td>@Session["Imagen"]</td>
+            <td><img src="../imagenesUsuarios/@Session["Imagen"]" width="50" height="50" /></td>
             <td>@Session["ID_Spotify"]</td>
         </tr>
     </tbody>
