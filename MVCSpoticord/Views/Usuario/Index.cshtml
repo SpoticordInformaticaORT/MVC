@@ -7,9 +7,7 @@
 {
     <div style="height:5vw;width:20%;display:flex;flex-wrap:wrap;align-content:center;justify-content:space-around;margin-top:1vw;border: solid black 0.1vw;padding-top: 1.5%;padding-bottom: 1%;">
             <img src="../imagenesUsuarios/@Session["Imagen"]" style="height:3vw;margin:1%;" />
-            <a href="../Views/Usuario/PerfilUsuario.cshtml">
-                <p style="height:100%;display:flex;flex-wrap:wrap;align-content:center;justify-content:center;margin: 1%;">@Session["Username"]</p>
-            </a>
+            <p style="height:100%;display:flex;flex-wrap:wrap;align-content:center;justify-content:center;margin: 1%;">@Html.ActionLink(Session["Username"].ToString(), "Perfilusuario", "Usuario")</p>
     </div>
 }
 

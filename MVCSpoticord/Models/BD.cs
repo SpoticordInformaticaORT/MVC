@@ -61,28 +61,31 @@ namespace MVCSpoticord.Models
         public static Usuario Login(string Username, string Contraseña)
         {
             Usuario unUsuario = null;
-            SqlConnection conexion = Conectar();
-            SqlCommand consulta = conexion.CreateCommand();
-            consulta.CommandText = "sp_Login";
-            consulta.CommandType = System.Data.CommandType.StoredProcedure;
-            consulta.Parameters.AddWithValue("@Username", Username);
-            consulta.Parameters.AddWithValue("@Contraseña", Contraseña);
-            consulta.ExecuteNonQuery();
-            SqlDataReader lector = consulta.ExecuteReader();
-            if (lector.HasRows)
+            if (Username != null && Contraseña != null)
             {
-                lector.Read();
-                unUsuario = new Usuario();
-                unUsuario.ID = Convert.ToInt32(lector["ID_Usuario"]);
-                unUsuario.Nombre = (lector["Nombre"]).ToString();
-                unUsuario.Apellido = lector["Apellido"].ToString();
-                unUsuario.Username = (lector["Username"]).ToString();
-                unUsuario.Contraseña = (lector["Contraseña"]).ToString();
-                unUsuario.Mail = (lector["Mail"]).ToString();
-                unUsuario.Imagen = (lector["Imagen"]).ToString();
-                unUsuario.ID_Spotify = 0; //Convert.ToInt32(lector["ID_Spotify"]);
+                SqlConnection conexion = Conectar();
+                SqlCommand consulta = conexion.CreateCommand();
+                consulta.CommandText = "sp_Login";
+                consulta.CommandType = System.Data.CommandType.StoredProcedure;
+                consulta.Parameters.AddWithValue("@Username", Username);
+                consulta.Parameters.AddWithValue("@Contraseña", Contraseña);
+                consulta.ExecuteNonQuery();
+                SqlDataReader lector = consulta.ExecuteReader();
+                if (lector.HasRows)
+                {
+                    lector.Read();
+                    unUsuario = new Usuario();
+                    unUsuario.ID = Convert.ToInt32(lector["ID_Usuario"]);
+                    unUsuario.Nombre = (lector["Nombre"]).ToString();
+                    unUsuario.Apellido = lector["Apellido"].ToString();
+                    unUsuario.Username = (lector["Username"]).ToString();
+                    unUsuario.Contraseña = (lector["Contraseña"]).ToString();
+                    unUsuario.Mail = (lector["Mail"]).ToString();
+                    unUsuario.Imagen = (lector["Imagen"]).ToString();
+                    unUsuario.ID_Spotify = 0; //Convert.ToInt32(lector["ID_Spotify"]);
+                }
+                conexion.Close();
             }
-            conexion.Close();
             return unUsuario;
         }
 

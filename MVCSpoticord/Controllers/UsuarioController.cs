@@ -89,5 +89,19 @@ namespace MVCSpoticord.Controllers
                 return RedirectToAction("PerfilUsuario");
             }
         }
+
+        public ActionResult CerrarSesion()
+        {
+            Session["ID_Usuario"] = null;
+            Session["Nombre"] = null;
+            Session["Apellido"] = null;
+            Session["Username"] = null;
+            Session["Contraseña"] = null;
+            Session["Mail"] = null;
+            Session["Imagen"] = null;
+            Session["ID_Spotify"] = null;
+            Session["Error"] = null;
+            return RedirectToAction("Login");
+        }
     }
 }
