@@ -61,6 +61,7 @@ namespace MVCSpoticord.Models
         public static Usuario Login(string Username, string Contraseña)
         {
             Usuario unUsuario = null;
+            string respuesta = null;
             if (Username != null && Contraseña != null)
             {
                 SqlConnection conexion = Conectar();
@@ -130,6 +131,23 @@ namespace MVCSpoticord.Models
             }
             conexion.Close();
             return id;
+        }
+
+        public static string CrearGrupo(string Nombre, string Imagen)
+        {
+            string result = null;
+            SqlConnection conexion = Conectar();
+            SqlCommand consulta = conexion.CreateCommand();
+            consulta.CommandText = "sp_CrearGrupo";
+            consulta.CommandType = System.Data.CommandType.StoredProcedure;
+            consulta.Parameters.AddWithValue("@Nombre", Nombre);
+            consulta.Parameters.AddWithValue("@Imagen", Imagen);
+            SqlDataReader lector = consulta.ExecuteReader();
+            if (lector.HasRows)
+            {
+                result = lector.Read().ToString();
+            }
+            return result;
         }
     }
 }

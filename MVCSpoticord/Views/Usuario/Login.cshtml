@@ -1,24 +1,38 @@
 ﻿@using MVCSpoticord.Models;
 @model Usuario
 @{
-    ViewBag.Title = "Login";
+    Layout = null;
 }
 
-@if (Session["Error"] != null)
-{
-    <div id="ErrorLogin">
-        <p style="height: 3vw; width: 30vw;display: flex;flex-wrap: wrap;align-content: center;justify-content: center;">
-            <strong>Nombre de usuario o contraseña incorrectas</strong>
-        </p>
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <link href="../Content/Site.css" rel="stylesheet" type="text/css" />
+    <title>Login</title>
+</head>
+<body id="Login">
+    @if (Session["Error"] != null)
+    {
+        <div id="ErrorLogin">
+            <p>
+                <strong>Nombre de usuario y/o contraseña incorrecto</strong>
+            </p>
+        </div>
+    }
+    <div id="Logo">
+        <img src='../imagenes/logo.png' />
     </div>
-}
-
-<h2>Sign In</h2>
-
-@using (Html.BeginForm("LoginEnBD", "Usuario", FormMethod.Post, new { enctype = "multipart/form-data" }))
-{
-    <p>Username: @Html.TextBoxFor(x => x.Username)</p>
-    <p>Contraseña: @Html.TextBoxFor(x => x.Contraseña)</p>
-    //<input type="file" value="Submit" name="Imagen" />
-    <input type="submit" value="Iniciar Sesion" />
-}
+    <div id="FormularioLogin">
+        <form action="@Url.Action("LoginEnBD", "Usuario")" method="post" enctype="multipart/form-data">
+            <input type="text" name="username" class="form-control form-control-sm" placeholder="Usuario" />
+            <input type="text" name="contraseña" class="form-control form-control-sm" placeholder="Contraseña" />
+            <input style="box-sizing: unset;" type="submit" value="Ingresar" class="btn btn-info" />
+        </form>
+    </div>
+    <div id="RedireccionRegistro">
+        <p1>@Html.ActionLink("Todavia no tenes una cuenta? Hace click aca y registrate!", "Registrar", "Usuario")</p1>
+    </div>
+</body>
+</html>

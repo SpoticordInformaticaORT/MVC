@@ -103,5 +103,33 @@ namespace MVCSpoticord.Controllers
             Session["Error"] = null;
             return RedirectToAction("Login");
         }
+
+        public ActionResult CrearGrupo()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public ActionResult CrearGrupoEnBD(Grupo unGrupo, HttpPostedFileBase Imagen)
+        {
+            string resultado;
+            if (Imagen != null && Imagen.ContentLength > 0)
+            {
+                string NuevaUbicacion = Server.MapPath("~/ImagenesGrupos/") + Imagen.FileName;
+                Imagen.SaveAs(NuevaUbicacion);
+                unGrupo.Imagen = Imagen.FileName;
+            }
+            resultado = BD.CrearGrupo(unGrupo.Nombre, unGrupo.Imagen);
+            if (resultado == "True")
+            {
+                Session["NombreGrupo"] = unGrupo.Nombre;
+                Session["ImagenGrupo"] = unGrupo.Imagen;
+                return RedirectToAction("PerfilGrupo");
+            }
+            else
+            {
+                return RedirectToAction("CrearGrupo");
+            }
+        }
     }
 }

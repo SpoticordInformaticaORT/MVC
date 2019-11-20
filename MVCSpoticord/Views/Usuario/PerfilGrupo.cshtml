@@ -1,0 +1,23 @@
+﻿@using MVCSpoticord.Models;
+@model Grupo
+@{
+    ViewBag.Title = "PerfilGrupo";
+}
+
+<h2>PerfilGrupo</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col">Nombre</th>
+            <th scope="col">Imagen</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <!--<th scope="row">ID</th>-->
+            <td>@Session["NombreGrupo"]</td>
+            <td><img src="../imagenesUsuarios/@Session["ImagenGrupo"]" width="50" height="50" /></td>
+        </tr>
+    </tbody>
+</table>

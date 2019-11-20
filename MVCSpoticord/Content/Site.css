@@ -1,4 +1,9 @@
-﻿body {
+﻿html {
+    height: 100%;
+    width: 100%;
+}
+
+body {
     padding-top: 50px;
     padding-bottom: 20px;
 }
@@ -35,4 +40,74 @@ textarea {
     background-color: red;
     border-radius: 1.4vw;
     color: white;
+}
+
+#Login {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    align-content: center;
+    justify-content: center;
+    background-color: #c5a7d9;
+    margin: 0 auto;
+    padding: 0;
+}
+
+#Logo {
+    height: 20%;
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    align-content: center;
+    justify-content: center;
+}
+
+#Logo img {
+    height: 10vw;
+    width: 15vw;
+}
+
+#FormularioLogin {
+    height: 40%;
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    align-content: center;
+    justify-content: center;
+}
+
+#FormularioLogin form{
+    height: 80%;
+    width: 50%;
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
+    align-content: center;
+    justify-content: space-evenly;
+}
+
+#FormularioLogin form input{
+    height: 15%;
+    width: 100%;
+    border-radius: 8vw;
+    border: 0;
+    padding: 1vw;
+    font-size: inherit;
+}
+
+.btn{
+    color: blueviolet;   
+    background-color: rgb(253, 207, 0);
+    border: #f2e205;
+    cursor: pointer;
+}
+
+#RedireccionRegistro {
+    height: 10%;
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    align-content: center;
+    justify-content: center;
 }
