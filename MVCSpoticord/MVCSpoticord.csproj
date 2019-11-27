@@ -202,6 +202,7 @@
     <Content Include="Views\Usuario\CrearGrupo.cshtml" />
     <Content Include="Views\Usuario\PerfilGrupo.cshtml" />
     <Content Include="Views\Usuario\Login.cshtml" />
+    <Content Include="Views\Usuario\AñadirIntegrante.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

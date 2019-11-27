@@ -9,7 +9,7 @@ namespace MVCSpoticord.Models
 {
     public class BD
     {
-        private static string _connectionString = "Server=localhost; Database='AppDeMusica'; Trusted_Connection=True;";
+        private static string _connectionString = "Server=localhost; Database=AppDeMusica; user id=alumno; password=alumno1"; //trustedConection=True;
 
         public static string ConnectionString
         {
@@ -61,7 +61,6 @@ namespace MVCSpoticord.Models
         public static Usuario Login(string Username, string Contraseña)
         {
             Usuario unUsuario = null;
-            string respuesta = null;
             if (Username != null && Contraseña != null)
             {
                 SqlConnection conexion = Conectar();
@@ -133,9 +132,9 @@ namespace MVCSpoticord.Models
             return id;
         }
 
-        public static string CrearGrupo(string Nombre, string Imagen)
+        public static int CrearGrupo(string Nombre, string Imagen)
         {
-            string result = null;
+            int result = 0;
             SqlConnection conexion = Conectar();
             SqlCommand consulta = conexion.CreateCommand();
             consulta.CommandText = "sp_CrearGrupo";
@@ -145,9 +144,115 @@ namespace MVCSpoticord.Models
             SqlDataReader lector = consulta.ExecuteReader();
             if (lector.HasRows)
             {
-                result = lector.Read().ToString();
+                lector.Read();
+                result = Convert.ToInt32(lector["ID_Grupo"]);
             }
             return result;
+        }
+
+        public static void AñadirIntegranteDeGrupo(int idGrupo, int idUsuario)
+        {
+            SqlConnection conexion = Conectar();
+            SqlCommand consulta = conexion.CreateCommand();
+            consulta.CommandText = "sp_AñadirIntegranteDeGrupo";
+            consulta.CommandType = System.Data.CommandType.StoredProcedure;
+            consulta.Parameters.AddWithValue("@ID_Grupo", idGrupo);
+            consulta.Parameters.AddWithValue("@ID_Usuario", idUsuario);
+            consulta.ExecuteNonQuery();
+        }
+
+        public static List<Usuario> ObtenerLosIntegrantes(int idGrupo)
+        {
+            List<Usuario> Integrantes = new List<Usuario>();
+            SqlConnection conexion = Conectar();
+            SqlCommand consulta = conexion.CreateCommand();
+            consulta.CommandText = "sp_ObtenerTodosLosIntegrantes";
+            consulta.CommandType = System.Data.CommandType.StoredProcedure;
+            consulta.Parameters.AddWithValue("@ID_Grupo", idGrupo);
+            consulta.ExecuteNonQuery();
+            SqlDataReader lector = consulta.ExecuteReader();
+            if (lector.HasRows)
+            {
+                while (lector.Read())
+                {
+                    Usuario usuario = new Usuario();
+                    usuario.ID = Convert.ToInt32(lector["ID_Usuario"]);
+                    usuario.Username = (lector["Username"]).ToString();
+                    usuario.Imagen = (lector["Imagen"]).ToString();
+                    Integrantes.Add(usuario);
+                }
+            }
+            return Integrantes;
+        }
+
+        public static List<Grupo> ObtenerMisGrupos(int idUsuario)
+        {
+            List<Grupo> grupos = new List<Grupo>();
+            SqlConnection conexion = Conectar();
+            SqlCommand consulta = conexion.CreateCommand();
+            consulta.CommandText = "sp_ObtenerMisGrupos";
+            consulta.CommandType = System.Data.CommandType.StoredProcedure;
+            consulta.Parameters.AddWithValue("@ID_Usuario", idUsuario);
+            consulta.ExecuteNonQuery();
+            SqlDataReader lector = consulta.ExecuteReader();
+            if (lector.HasRows)
+            {
+                while (lector.Read())
+                {
+                    Grupo unGrupo = new Grupo();
+                    unGrupo.ID = Convert.ToInt32(lector["ID_Grupo"]);
+                    unGrupo.Nombre = (lector["Nombre"]).ToString();
+                    unGrupo.Imagen = (lector["Imagen"]).ToString();
+                    grupos.Add(unGrupo);
+                }
+            }
+            return grupos;
+        }
+
+        public static Grupo ObtenerUnGrupo(int id)
+        {
+            Grupo unGrupo = new Grupo();
+            SqlConnection conexion = Conectar();
+            SqlCommand consulta = conexion.CreateCommand();
+            consulta.CommandText = "sp_ObtenerUnGrupo";
+            consulta.CommandType = System.Data.CommandType.StoredProcedure;
+            consulta.Parameters.AddWithValue("@ID_Grupo", id);
+            consulta.ExecuteNonQuery();
+            SqlDataReader lector = consulta.ExecuteReader();
+            if (lector.HasRows)
+            {
+                lector.Read();
+                unGrupo.ID = Convert.ToInt32(lector["ID_Grupo"]);
+                unGrupo.Nombre = (lector["Nombre"]).ToString();
+                unGrupo.Imagen = (lector["Imagen"]).ToString();
+            }
+            return unGrupo;
+        }
+
+        public static Usuario ObtenerUnUsuario(string username)
+        {
+            Usuario unUsuario = null;
+            SqlConnection conexion = Conectar();
+            SqlCommand consulta = conexion.CreateCommand();
+            consulta.CommandText = "sp_ObtenerUnUsuario";
+            consulta.CommandType = System.Data.CommandType.StoredProcedure;
+            consulta.Parameters.AddWithValue("@Username", username);
+            consulta.ExecuteNonQuery();
+            SqlDataReader lector = consulta.ExecuteReader();
+            if (lector.HasRows)
+            {
+                lector.Read();
+                unUsuario = new Usuario();
+                unUsuario.ID = Convert.ToInt32(lector["ID_Usuario"]);
+                unUsuario.Nombre = (lector["Nombre"]).ToString();
+                unUsuario.Apellido = lector["Apellido"].ToString();
+                unUsuario.Username = (lector["Username"]).ToString();
+                unUsuario.Contraseña = (lector["Contraseña"]).ToString();
+                unUsuario.Mail = (lector["Mail"]).ToString();
+                unUsuario.Imagen = (lector["Imagen"]).ToString();
+                unUsuario.ID_Spotify = 0; //Convert.ToInt32(lector["ID_Spotify"]);
+            }
+            return unUsuario;
         }
     }
 }

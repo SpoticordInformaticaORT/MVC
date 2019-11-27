@@ -1,0 +1,13 @@
+﻿@using MVCSpoticord.Models;
+@model Usuario
+@{
+    ViewBag.Title = "AñadirIntegrante";
+}
+
+<h2>AñadirIntegrante</h2>
+
+@using (Html.BeginForm("AñadirIntegranteEnBD", "Usuario", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    <p>Nombre de Usuario: @Html.TextBoxFor(x => x.Username)</p>
+    <input type="submit" value="Añadir Integrante" />
+}

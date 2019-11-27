@@ -9,15 +9,45 @@
 <table class="table">
     <thead>
         <tr>
+            <th scope="col">ID</th>
             <th scope="col">Nombre</th>
             <th scope="col">Imagen</th>
         </tr>
     </thead>
     <tbody>
         <tr>
-            <!--<th scope="row">ID</th>-->
-            <td>@Session["NombreGrupo"]</td>
-            <td><img src="../imagenesUsuarios/@Session["ImagenGrupo"]" width="50" height="50" /></td>
+            <th scope="row">@Model.ID</th>
+            <td>@Model.Nombre</td>
+            <td><img src="../imagenesGrupos/@Model.Imagen" width="50" height="50" /></td>
         </tr>
     </tbody>
 </table>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col">ID</th>
+            <th scope="col">Username</th>
+            <th scope="col">Imagen</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (Usuario usuario in ViewBag.Integrantes)
+        {
+            <tr>
+                <th scope="row">@usuario.ID</th>
+                <td>@usuario.Username</td>
+                <td><img src="../imagenesUsuarios/@usuario.Imagen" width="50" height="50" /></td>
+                <td>@Html.ActionLink("Eliminar integrante", "EliminarIntegrante", "Usuario", new { id = usuario.ID }, null)</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<div>
+    @Html.ActionLink("Añadir integrante", "AñadirIntegrante", "Usuario")
+</div>
+
+<div>
+    @Html.ActionLink("EliminarGrupo", "EliminarGrupo", "Usuario", new { id = Model.ID }, null)
+</div>
