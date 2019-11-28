@@ -9,7 +9,7 @@ namespace MVCSpoticord.Models
 {
     public class BD
     {
-        private static string _connectionString = "Server=localhost; Database=AppDeMusica; user id=alumno; password=alumno1"; //trustedConection=True;
+        private static string _connectionString = "Server=localhost; Database=AppDeMusica; user id=alumno; password=alumno1"; //Trusted_Conection=True;
 
         public static string ConnectionString
         {
@@ -150,11 +150,32 @@ namespace MVCSpoticord.Models
             return result;
         }
 
+        public static void EliminarGrupo(int id)
+        {
+            SqlConnection conexion = Conectar();
+            SqlCommand consulta = conexion.CreateCommand();
+            consulta.CommandText = "sp_EliminarGrupo";
+            consulta.CommandType = System.Data.CommandType.StoredProcedure;
+            consulta.Parameters.AddWithValue("@ID_Grupo", id);
+            consulta.ExecuteNonQuery();
+        }
+
         public static void AñadirIntegranteDeGrupo(int idGrupo, int idUsuario)
         {
             SqlConnection conexion = Conectar();
             SqlCommand consulta = conexion.CreateCommand();
             consulta.CommandText = "sp_AñadirIntegranteDeGrupo";
+            consulta.CommandType = System.Data.CommandType.StoredProcedure;
+            consulta.Parameters.AddWithValue("@ID_Grupo", idGrupo);
+            consulta.Parameters.AddWithValue("@ID_Usuario", idUsuario);
+            consulta.ExecuteNonQuery();
+        }
+
+        public static void EliminarIntegranteDeGrupo(int idGrupo, int idUsuario)
+        {
+            SqlConnection conexion = Conectar();
+            SqlCommand consulta = conexion.CreateCommand();
+            consulta.CommandText = "sp_EliminarIntegrante";
             consulta.CommandType = System.Data.CommandType.StoredProcedure;
             consulta.Parameters.AddWithValue("@ID_Grupo", idGrupo);
             consulta.Parameters.AddWithValue("@ID_Usuario", idUsuario);

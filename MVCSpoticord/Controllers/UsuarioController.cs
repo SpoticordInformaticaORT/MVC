@@ -43,7 +43,14 @@ namespace MVCSpoticord.Controllers
 
         public ActionResult Login()
         {
-            return View();
+            if (Session["ID_Usuario"] == null)
+            {
+                return View();
+            }
+            else
+            {
+                return RedirectToAction("PerfilUsuario");
+            }
         }
 
         [HttpPost]
@@ -66,24 +73,45 @@ namespace MVCSpoticord.Controllers
             Session["Imagen"] = user.Imagen;
             Session["ID_Spotify"] = user.ID_Spotify;
             Session["Error"] = null;
-            return RedirectToAction("Index");
+            return RedirectToAction("PerfilUsuario");
         }
 
         public ActionResult Registrar()
         {
-            return View();
+            if (Session["ID_Usuario"] == null)
+            {
+                return View();
+            }
+            else
+            {
+                return RedirectToAction("PerfilUsuario");
+            }
         }
 
         public ActionResult PerfilUsuario()
         {
-            List<Grupo> misGrupos = BD.ObtenerMisGrupos(Convert.ToInt32(Session["ID_Usuario"]));
-            ViewBag.misGrupos = misGrupos;
-            return View();
+            if (Session["ID_Usuario"] == null)
+            {
+                return RedirectToAction("Login");
+            }
+            else
+            {
+                List<Grupo> misGrupos = BD.ObtenerMisGrupos(Convert.ToInt32(Session["ID_Usuario"]));
+                ViewBag.misGrupos = misGrupos;
+                return View();
+            }
         }
 
         public ActionResult ModificarContraseña()
         {
-            return View();
+            if (Session["ID_Usuario"] == null)
+            {
+                return RedirectToAction("Login");
+            }
+            else
+            {
+                return View();
+            }
         }
 
         [HttpPost]
@@ -118,7 +146,14 @@ namespace MVCSpoticord.Controllers
 
         public ActionResult CrearGrupo()
         {
-            return View();
+            if (Session["ID_Usuario"] == null)
+            {
+                return RedirectToAction("Login");
+            }
+            else
+            {
+                return View();
+            }
         }
 
         [HttpPost]
@@ -143,22 +178,43 @@ namespace MVCSpoticord.Controllers
             }
         }
 
-        public ActionResult PerfilGrupo(int id)
+        public ActionResult PerfilGrupo()
         {
-            List<Usuario> integrantes = BD.ObtenerLosIntegrantes(id);
-            ViewBag.Integrantes = integrantes;
-            Grupo grupo = BD.ObtenerUnGrupo(id);
-            Session["ID_Grupo"] = grupo.ID;
-            return View(grupo);
+            if (Session["ID_Usuario"] == null)
+            {
+                return RedirectToAction("Login");
+            }
+            else
+            {
+                List<Usuario> integrantes = BD.ObtenerLosIntegrantes(Convert.ToInt32(Session["ID_Grupo"]));
+                ViewBag.Integrantes = integrantes;
+                Grupo grupo = BD.ObtenerUnGrupo(Convert.ToInt32(Session["ID_Grupo"]));
+                Session["ID_Grupo"] = grupo.ID;
+                return View(grupo);
+            }
+        }
+
+        public ActionResult ID_Grupo(int id)
+        {
+            Session["ID_Grupo"] = id;
+            return RedirectToAction("PerfilGrupo");
         }
 
         public ActionResult AñadirIntegrante()
         {
-            return View();
+            if (Session["ID_Usuario"] == null)
+            {
+                return RedirectToAction("Login");
+            }
+            else
+            {
+                return View();
+            }
         }
 
         public ActionResult AñadirIntegranteEnBD(Usuario usuario)
         {
+            int idGrupo = Convert.ToInt32(Session["ID_Grupo"]);
             Usuario user = BD.ObtenerUnUsuario(usuario.Username);
             if (user == null)
             {
@@ -167,9 +223,21 @@ namespace MVCSpoticord.Controllers
             }
             else
             {
-                BD.AñadirIntegranteDeGrupo(Convert.ToInt32(Session["ID_Grupo"]), user.ID);
-                return RedirectToAction("PerfilGrupo", Convert.ToInt32(Session["ID_Grupo"]));
+                BD.AñadirIntegranteDeGrupo(idGrupo, user.ID);
+                return RedirectToAction("PerfilGrupo");
             }
+        }
+
+        public ActionResult EliminarIntegrante(int id)
+        {
+            BD.EliminarIntegranteDeGrupo(Convert.ToInt32(Session["ID_Grupo"]), id);
+            return RedirectToAction("PerfilGrupo");
+        }
+
+        public ActionResult EliminarGrupo(int id)
+        {
+            BD.EliminarGrupo(id);
+            return RedirectToAction("PerfilUsuario");
         }
     }
 }
